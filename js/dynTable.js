@@ -131,3 +131,50 @@ function generate_mult_table() {
 
     //}
 }
+
+function saveTable() {
+
+    $("#tableTabs").tabs();
+    //get the values for each input
+    var minHoriz = Number(document.getElementById('minHoriz').value);
+    var maxHoriz = Number(document.getElementById('maxHoriz').value);
+    var minVert = Number(document.getElementById('minVert').value);
+    var maxVert = Number(document.getElementById('maxVert').value);
+    //increment tab index
+    tabIndex++;
+
+    //creates a tab with a header lisitng the paramters
+    var params = "<li class='tab'><a href='#tab-" + tabIndex + "'>" + minHoriz +
+        " x " + maxHoriz + " with " + minVert + " x " + maxVert + "</a>" +
+        "<span class='ui-icon ui-icon-close' role='presentation'></span>" + "</li>";
+
+
+    $("#tableTabs ul").append(params);
+
+    // saves the mult table to the tab
+    $("#tableTabs").append('<div id="tab-' + tabIndex + '">' + $("#mult_table").html() + '</div>');
+
+    // new tab visible
+    $("#tableTabs").tabs("refresh");
+
+    // new tab active
+    $("#tableTabs").tabs("option", "active", -1);
+
+    // https://jqueryui.com/tabs/#manipulation
+    $("#tableTabs").delegate("span.ui-icon-close", "click", function() {
+        var panelID = $(this).closest("li").remove().attr("aria-controls");
+        $("#" + panelID).remove();
+
+
+        $("#tabs").tabs("refresh");
+
+        // https://api.jqueryui.com/tabs/#method-destroy
+        if ($('#tabs ul li.tab').length == 0) {
+            try {
+                $("#tabs").tabs("destroy");
+            } catch (e) {}
+
+            return false;
+        }
+    });
+}
